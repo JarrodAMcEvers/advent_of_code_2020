@@ -5,10 +5,12 @@ file = sys.argv[1] if len(sys.argv) > 1 else 'input.txt'
 with open(file, 'r') as f:
     rules, lines = [ line.strip() for line in f.read().split('\n\n') ]
 
+MAX_DEPTH = 6
 lines = lines.split('\n')
 rules = { int(rule.split(':')[0]): rule.split(':')[1].strip() for rule in rules.split('\n') }
 solved = {}
-def solve(rule_number) -> str:
+
+def solve(rule_number, depth=0) -> str:
     rule_number = int(rule_number)
     item = rules[rule_number]
     temp = '('
@@ -29,15 +31,7 @@ def solve(rule_number) -> str:
             for number in item.split(' '):
                 temp += solve(number)
             return temp + ')'
-
-for key, value in rules.items():
-    if '"' not in value:
-        if '|' not in value:
-            numbers = value.split(' ')
-            for number in numbers:
-                if not solved.get(number, None):
-                    solved[int(number)] = solve(number)
-            solved[0] = solve(0)
+solved[0] = solve(0)
 
 regex = '^' + solved[0] + '$'
 part1 = len([1 for item in filter(lambda x: re.match(regex, x), lines)])
