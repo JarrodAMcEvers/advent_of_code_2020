@@ -31,9 +31,35 @@ def solve_part1(rule_number) -> str:
             for number in item.split(' '):
                 temp += solve_part1(number)
             return temp + ')'
+
+def solve_part2(rule_set, rule_number, depth=0):
+    search_string = ''
+    for rule in rule_set[int(rule_number)]:
+        if rule.isdigit():
+            if rule == rule_number:
+                depth += 1
+            if depth != MAX_DEPTH:
+                search_string += solve_part2(rule_set, rule, depth)
+        elif rule == "|":
+            search_string += rule
+        else:
+            search_string += rule.replace('"', '')
+    return '(' + search_string + ')'
+
 def part1():
     solved[0] = solve_part1(0)
     regex = '^{}$'.format(solved[0])
     return len(list(filter(lambda x: re.match(regex, x), lines)))
 
+def part2():
+    with open('input2.txt', 'r') as f:
+        rules, lines = [ line.strip() for line in f.read().split('\n\n') ]
+    lines = lines.split('\n')
+    rule_set = { int(rule.split(':')[0]): rule.split(':')[1].strip().split(' ') for rule in rules.split('\n') }
+    solved = {}
+    solved[0] = solve_part2(rule_set, 0)
+    regex = '^{}$'.format(solved[0])
+    return len(list(filter(lambda x: re.match(regex, x), lines)))
+
 print('Part 1:', part1())
+print('Part 2:', part2())
