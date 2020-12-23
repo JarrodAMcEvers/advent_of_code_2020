@@ -1,4 +1,3 @@
-from functools import reduce
 from collections import defaultdict
 import sys
 file = sys.argv[1] if len(sys.argv) > 1 else 'input.txt'
@@ -27,19 +26,6 @@ def part1(player1_deck, player2_deck):
     # print('Number of passes', passes)
     deck = player1_deck if len(player1_deck) > 0 else player2_deck
     return sum([(index + 1) * card for index, card in enumerate(deck)])
-
-# def is_same_round_played(previous_cards, p1, p2):
-#     if len(p1) != len(p2):
-#         return False
-#     if len(previous_cards) == 0:
-#         return False
-#
-#     for index, j in enumerate(previous_cards):
-#         print(j[0] == p1 and j[1] == p2)
-#         if j[0] == p1 and j[1] == p2:
-#             return True
-#     return False
-
 
 def part2(player1_deck, player2_deck):
     passes = 0
